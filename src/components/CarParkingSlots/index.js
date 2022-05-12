@@ -1,4 +1,5 @@
 import {Component} from 'react'
+import {v4} from 'uuid'
 
 import GenerateSlots from '../GenerateSlots'
 import SlotsList from '../SlotsList'
@@ -6,22 +7,39 @@ import BookingSlot from '../BookingSlot'
 
 import './index.css'
 
-const CAR_COLORS = ['Black', 'White', 'Blue', 'Red']
+const colorOptions = [
+  {
+    optionId: 'BLACK',
+    displayText: 'Black',
+  },
+  {
+    optionId: 'WHITE',
+    displayText: 'White',
+  },
+  {
+    optionId: 'BLUE',
+    displayText: 'Blue',
+  },
+  {
+    optionId: 'RED',
+    displayText: 'Red',
+  },
+]
 
 class CarParkingSlots extends Component {
   state = {
     parkingSlotsInput: '',
-    initialCarsParkedInput: '',
-    errorMessage: '',
-    areSlotsGenerated: false,
+    carsInput: '',
+    generateSlotsErrorMessage: '',
+    isBookASlotView: false,
+    registrationNumberInput: '',
+    colorInput: 'Black',
+    slotNumberInput: '',
+    bookASlotErrorMessage: '',
     parkedCarsList: [],
-    bookingSlot: {
-      registrationNumberInput: '',
-      colorInput: 'Black',
-      slotNumberInput: '',
-      errorMessage: '',
-    },
   }
+
+  // #region - checked functions
 
   getEmptySlotsNumber = () => {
     const {parkedCarsList} = this.state
@@ -41,8 +59,7 @@ class CarParkingSlots extends Component {
   }
 
   isSlotAvailable = () => {
-    const {bookingSlot, parkedCarsList, parkingSlotsInput} = this.state
-    const {slotNumberInput} = bookingSlot
+    const {parkedCarsList, parkingSlotsInput, slotNumberInput} = this.state
     const parsedParkingSlotsInput = parseInt(parkingSlotsInput)
     const parsedSlotNumberInput = parseInt(slotNumberInput)
 
@@ -54,26 +71,8 @@ class CarParkingSlots extends Component {
     return false
   }
 
-  getNewlyParkedCarObject = () => {
-    const {bookingSlot} = this.state
-    const {registrationNumberInput, colorInput, slotNumberInput} = bookingSlot
-    const slotNumber =
-      slotNumberInput && this.isSlotAvailable()
-        ? parseInt(slotNumberInput)
-        : this.getEmptySlotsNumber()
-    const newParkingCar = {
-      id: slotNumber,
-      registrationNumber: registrationNumberInput,
-      color: colorInput,
-      slotNumber,
-    }
-
-    return newParkingCar
-  }
-
   isSlotFilled = () => {
-    const {parkedCarsList, bookingSlot} = this.state
-    const {slotNumberInput} = bookingSlot
+    const {parkedCarsList, slotNumberInput} = this.state
 
     if (slotNumberInput) {
       return parkedCarsList.some(
@@ -84,115 +83,100 @@ class CarParkingSlots extends Component {
     return false
   }
 
-  isCarAlreadyPresent = () => {
-    const {parkedCarsList, bookingSlot} = this.state
-    const {registrationNumberInput} = bookingSlot
-    const carIndex = parkedCarsList.findIndex(
-      car => car.registrationNumber === registrationNumberInput,
-    )
-
-    return carIndex !== -1
-  }
-
-  validateAndBookSlot = () => {
-    const {parkingSlotsInput, parkedCarsList, bookingSlot} = this.state
-    const {slotNumberInput} = bookingSlot
+  validateAndBookASlot = () => {
+    const {
+      parkingSlotsInput,
+      parkedCarsList,
+      registrationNumberInput,
+      colorInput,
+      slotNumberInput,
+    } = this.state
     const filledSlotsCount = parkedCarsList.length
     const parsedParkingSlotsInput = parseInt(parkingSlotsInput)
     const parsedSlotNumberInput = parseInt(slotNumberInput)
+    const carObject = parkedCarsList.find(
+      eachCarItem => eachCarItem.registrationNumber === registrationNumberInput,
+    )
+    const slotNumber =
+      slotNumberInput && this.isSlotAvailable()
+        ? parsedSlotNumberInput
+        : this.getEmptySlotsNumber()
 
-    if (this.isCarAlreadyPresent()) {
+    const newParkingCar = {
+      id: v4(),
+      registrationNumber: registrationNumberInput,
+      color: colorInput,
+      slotNumber,
+    }
+
+    if (carObject) {
       this.setState({
-        bookingSlot: {
-          ...bookingSlot,
-          errorMessage: 'Car is already in parking slot',
-        },
+        bookASlotErrorMessage: 'Car is already in parking slot',
       })
     } else if (
       (slotNumberInput !== '' && parsedSlotNumberInput <= 0) ||
       parsedSlotNumberInput > parsedParkingSlotsInput
     ) {
       this.setState({
-        bookingSlot: {...bookingSlot, errorMessage: 'Invalid slot number'},
+        bookASlotErrorMessage: 'Invalid slot number',
       })
     } else if (parsedParkingSlotsInput <= filledSlotsCount) {
-      this.setState({
-        bookingSlot: {...bookingSlot, errorMessage: 'No slots available'},
-      })
+      this.setState({bookASlotErrorMessage: 'No slots available'})
     } else if (this.isSlotFilled()) {
       this.setState({
-        bookingSlot: {...bookingSlot, errorMessage: 'Slot is not empty'},
+        bookASlotErrorMessage: 'Slot is not empty',
       })
     } else {
-      const newParkedCarsList = [
-        ...parkedCarsList,
-        this.getNewlyParkedCarObject(),
-      ]
-      const sortedParkedCarsList = newParkedCarsList.sort(
+      const updatedParkedCarsList = [...parkedCarsList, newParkingCar]
+      const sortedParkedCarsList = updatedParkedCarsList.sort(
         (carObj1, carObj2) => carObj1.slotNumber - carObj2.slotNumber,
       )
 
       this.setState({
         parkedCarsList: sortedParkedCarsList,
-        bookingSlot: {
-          registrationNumberInput: '',
-          colorInput: 'Black',
-          slotNumberInput: '',
-          errorMessage: '',
-        },
+        registrationNumberInput: '',
+        colorInput: 'Black',
+        slotNumberInput: '',
+        bookASlotErrorMessage: '',
       })
     }
   }
 
-  bookASlot = () => {
-    const {bookingSlot} = this.state
-    const {registrationNumberInput} = bookingSlot
+  submitBookASlotForm = () => {
+    const {registrationNumberInput} = this.state
 
     if (registrationNumberInput) {
-      this.validateAndBookSlot()
+      this.validateAndBookASlot()
     } else {
       this.setState({
-        bookingSlot: {
-          ...bookingSlot,
-          errorMessage: 'Registration number is required',
-        },
+        bookASlotErrorMessage: 'Registration number is required',
       })
     }
   }
 
-  changeBookingRegistrationNumberInput = regNum => {
-    const {bookingSlot} = this.state
-
-    this.setState({
-      bookingSlot: {...bookingSlot, registrationNumberInput: regNum},
-    })
+  changeSlotNumberInput = slotNumber => {
+    this.setState({slotNumberInput: slotNumber})
   }
 
-  changeBookingColorInput = color => {
-    const {bookingSlot} = this.state
-
-    this.setState({
-      bookingSlot: {...bookingSlot, colorInput: color},
-    })
+  changeColorInput = color => {
+    this.setState({colorInput: color})
   }
 
-  changeBookingSlotNumberInput = num => {
-    const {bookingSlot} = this.state
-
-    this.setState({
-      bookingSlot: {...bookingSlot, slotNumberInput: num},
-    })
+  changeRegistrationNumberInput = registrationNumber => {
+    this.setState({registrationNumberInput: registrationNumber})
   }
 
   returnTicket = id => {
     const {parkedCarsList} = this.state
-    const updatedParkingSlots = [...parkedCarsList]
-
-    const parkingSlotIndex = updatedParkingSlots.findIndex(
-      parkedCar => parkedCar.id === id,
+    const updatedParkedCarsList = parkedCarsList.filter(
+      eachCarParkedItem => eachCarParkedItem.id !== id,
     )
-    updatedParkingSlots.splice(parkingSlotIndex, 1)
-    this.setState({parkedCarsList: updatedParkingSlots})
+    this.setState({parkedCarsList: updatedParkedCarsList})
+  }
+
+  generateRandomColor = () => {
+    const option = colorOptions[Math.floor(Math.random() * 4)]
+    return option.displayText
   }
 
   randomNumbersGenerator = () => {
@@ -216,116 +200,107 @@ class CarParkingSlots extends Component {
 
   generateRandomRegistrationNumber = () => {
     const result = `${this.randomAlphabetsGenerator()}-${this.randomNumbersGenerator()}-${this.randomAlphabetsGenerator()}-${this.randomNumbersGenerator()}${this.randomNumbersGenerator()}`
-
     return result
   }
 
-  generateParkedCarObject = carId => {
-    const carObject = {
-      id: carId,
-      registrationNumber: this.generateRandomRegistrationNumber(),
-      color: CAR_COLORS[Math.floor(Math.random() * 4)],
-      slotNumber: carId,
-    }
-
-    return carObject
-  }
-
-  generateParkingSlots = () => {
-    const {initialCarsParkedInput} = this.state
+  generateSlots = () => {
+    const {carsInput} = this.state
     const carsList = []
 
-    for (let i = 1; i <= initialCarsParkedInput; i += 1) {
-      carsList.push(this.generateParkedCarObject(i))
+    for (let i = 1; i <= carsInput; i += 1) {
+      const carObject = {
+        id: v4(),
+        registrationNumber: this.generateRandomRegistrationNumber(),
+        color: this.generateRandomColor(),
+        slotNumber: i,
+      }
+      carsList.push(carObject)
     }
 
     this.setState({
       parkedCarsList: carsList,
-      areSlotsGenerated: true,
-      errorMessage: '',
+      isBookASlotView: true,
+      generateSlotsErrorMessage: '',
     })
   }
 
-  validateAndGenerateSlots = () => {
-    const {parkingSlotsInput, initialCarsParkedInput} = this.state
+  submitGenerateSlotsForm = () => {
+    const {parkingSlotsInput, carsInput} = this.state
     const parsedParkingSlotsInput = parseInt(parkingSlotsInput)
-    const parsedInitialCarsParkedInput = parseInt(initialCarsParkedInput)
+    const parsedCarsInput = parseInt(carsInput)
 
-    if (
-      parsedParkingSlotsInput === 0 ||
-      parkingSlotsInput === '' ||
-      Number.isNaN(parsedParkingSlotsInput)
-    ) {
-      this.setState({errorMessage: 'Invalid parking slots'})
-    } else if (
-      parsedParkingSlotsInput < 0 ||
-      parsedInitialCarsParkedInput < 0
-    ) {
+    if (parsedParkingSlotsInput === 0 || parkingSlotsInput === '') {
+      this.setState({generateSlotsErrorMessage: 'Invalid parking slots'})
+    } else if (parsedParkingSlotsInput < 0 || parsedCarsInput < 0) {
       this.setState({
-        errorMessage: 'Parking Slots and Cars should not be less than 0',
+        generateSlotsErrorMessage:
+          'Parking Slots and Cars cannot be less than 0',
       })
-    } else if (parsedParkingSlotsInput < parsedInitialCarsParkedInput) {
-      this.setState({
-        errorMessage: 'Cars should not greater than Parking Slots',
-      })
+    } else if (parsedParkingSlotsInput < parsedCarsInput) {
+      this.setState({generateSlotsErrorMessage: 'Cannot generate slots'})
     } else {
-      this.generateParkingSlots()
+      this.generateSlots()
     }
   }
 
-  changeInitialCarsParkedInput = num => {
-    this.setState({initialCarsParkedInput: num})
+  changeCarsInput = carsNumber => {
+    this.setState({carsInput: carsNumber})
   }
 
-  changeParkingSlotsInput = num => {
-    this.setState({parkingSlotsInput: num})
+  changeParkingSlotsInput = parkingSlotsNumber => {
+    this.setState({parkingSlotsInput: parkingSlotsNumber})
   }
+
+  // #endregion
 
   render() {
     const {
-      areSlotsGenerated,
+      isBookASlotView,
       parkingSlotsInput,
-      initialCarsParkedInput,
-      errorMessage,
-      bookingSlot,
+      carsInput,
+      generateSlotsErrorMessage,
+      registrationNumberInput,
+      colorInput,
+      slotNumberInput,
+      bookASlotErrorMessage,
       parkedCarsList,
     } = this.state
-    const {registrationNumberInput, colorInput, slotNumberInput} = bookingSlot
+    const parsedParkingSlotsInput = parseInt(parkingSlotsInput)
 
     return (
       <>
-        {!areSlotsGenerated ? (
+        {!isBookASlotView ? (
           <GenerateSlots
             parkingSlotsInput={parkingSlotsInput}
-            initialCarsParkedInput={initialCarsParkedInput}
+            carsInput={carsInput}
             changeParkingSlotsInput={this.changeParkingSlotsInput}
-            changeInitialCarsParkedInput={this.changeInitialCarsParkedInput}
-            errorMessage={errorMessage}
-            generateSlots={this.validateAndGenerateSlots}
+            changeCarsInput={this.changeCarsInput}
+            generateSlotsErrorMessage={generateSlotsErrorMessage}
+            submitGenerateSlotsForm={this.submitGenerateSlotsForm}
           />
         ) : (
           <div className="booking-car-slot-view-container">
             <h1 className="booking-car-slot-view-heading">Car Parking Slots</h1>
+            <h1 className="slots-list-heading">
+              Total Slots: {parsedParkingSlotsInput}
+            </h1>
             <div className="booking-car-slot-container">
               <SlotsList
-                parkingSlotsInput={parkingSlotsInput}
                 parkedCarsList={parkedCarsList}
                 returnTicket={this.returnTicket}
               />
-
               <BookingSlot
                 registrationNumberInput={registrationNumberInput}
                 colorInput={colorInput}
                 slotNumberInput={slotNumberInput}
-                changeBookingRegistrationNumberInput={
-                  this.changeBookingRegistrationNumberInput
+                changeRegistrationNumberInput={
+                  this.changeRegistrationNumberInput
                 }
-                changeBookingColorInput={this.changeBookingColorInput}
-                changeBookingSlotNumberInput={this.changeBookingSlotNumberInput}
-                bookingDetails={bookingSlot}
-                bookASlot={this.bookASlot}
-                errorMessage={bookingSlot.errorMessage}
-                carColors={CAR_COLORS}
+                changeColorInput={this.changeColorInput}
+                changeSlotNumberInput={this.changeSlotNumberInput}
+                bookASlotErrorMessage={bookASlotErrorMessage}
+                submitBookASlotForm={this.submitBookASlotForm}
+                colorOptions={colorOptions}
               />
             </div>
           </div>

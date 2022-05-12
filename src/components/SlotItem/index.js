@@ -4,7 +4,7 @@ const SlotItem = props => {
   const {carDetails, returnTicket} = props
   const {registrationNumber, color, slotNumber, id} = carDetails
 
-  const onClickReturnTicket = () => {
+  const onReturnTicket = () => {
     returnTicket(id)
   }
 
@@ -18,7 +18,7 @@ const SlotItem = props => {
       <button
         type="button"
         className="return-ticket-button"
-        onClick={onClickReturnTicket}
+        onClick={onReturnTicket}
       >
         Return Ticket
       </button>

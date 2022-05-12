@@ -1,16 +1,25 @@
-* {
-  box-sizing: border-box;
-}
-
 .generate-slots-view-container {
   display: flex;
   color: #ffffff;
   background-image: linear-gradient(to right, #10111e, #1c1d37);
+  min-height: 100vh;
+  max-height: 100vh;
+}
+
+@media screen and (min-width: 1200px) {
+  .generate-slots-view-container {
+    max-height: 100vh;
+  }
 }
 
 .generate-slots-img {
   width: 50%;
-  height: 100vh;
+}
+
+@media screen and (min-width: 1200px) {
+  .generate-slots-img {
+    width: 54%;
+  }
 }
 
 .generate-slots-form {
@@ -18,17 +27,33 @@
   flex-direction: column;
   align-self: center;
   background-color: #292942;
-  border-radius: 32px;
-  margin: 64px;
-  padding: 48px;
+  width: 100%;
+  border-radius: 16px;
+  padding: 32px;
+  margin: 32px;
+}
+
+@media screen and (min-width: 1200px) {
+  .generate-slots-form {
+    border-radius: 32px;
+    padding: 48px;
+    margin: 64px;
+  }
 }
 
 .generate-slots-form-heading {
+  text-align: center;
   font-size: 32px;
-  font-weight: 500;
+  font-weight: 600;
   font-family: 'Roboto';
   margin-top: 0px;
-  margin-bottom: 40px;
+  margin-bottom: 45px;
+}
+
+@media screen and (min-width: 1200px) {
+  .generate-slots-form-heading {
+    margin-bottom: 55px;
+  }
 }
 
 .input-field-container {
@@ -38,18 +63,32 @@
   margin-bottom: 30px;
 }
 
+@media screen and (min-width: 1200px) {
+  .input-field-container {
+    margin-bottom: 20px;
+  }
+}
+
 .input-label {
   font-size: 16px;
+  font-weight: 500;
   margin-bottom: 8px;
 }
 
 .input {
   color: #ffffff;
-  height: 40px;
+  height: 48px;
   border: 1px solid #94a3b8;
   border-radius: 8px;
-  background-color: #292942;
+  background-color: transparent;
   padding: 8px;
+  outline: none;
+}
+
+@media screen and (min-width: 1200px) {
+  .input {
+    height: 58px;
+  }
 }
 
 .generate-slots-form-button {
@@ -59,7 +98,14 @@
   border: none;
   border-radius: 8px;
   cursor: pointer;
-  padding: 12px;
+  padding: 16px;
+  outline: none;
+}
+
+@media screen and (min-width: 1200px) {
+  .generate-slots-form-button {
+    margin-top: 18px;
+  }
 }
 
 .error-message {

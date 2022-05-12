@@ -1,28 +1,28 @@
 .slot-item {
   display: flex;
-  justify-content: space-between;
   font-family: 'Roboto';
   width: 100%;
   border-top: 1px solid #94a3b8;
-  padding-left: 20px;
+  padding-left: 22px;
 }
 
 .slot-item-description-registration-number {
-  width: 170px;
+  width: 38%;
 }
 
 .slot-item-description-color {
-  width: 130px;
+  width: 27%;
 }
 
 .slot-item-description-slot-number {
-  width: 110px;
+  width: 25%;
 }
 
 .return-ticket-button {
   color: #ffffff;
   background-color: #1c1d37;
   font-family: 'Roboto';
+  width: 20%;
   border: 1px solid #94a3b8;
   border-radius: 6px;
   cursor: pointer;

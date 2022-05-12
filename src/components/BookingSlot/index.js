@@ -5,34 +5,31 @@ const BookingSlot = props => {
     registrationNumberInput,
     colorInput,
     slotNumberInput,
-    errorMessage,
-    changeBookingRegistrationNumberInput,
-    changeBookingColorInput,
-    changeBookingSlotNumberInput,
-    bookASlot,
-    carColors,
+    changeRegistrationNumberInput,
+    changeColorInput,
+    changeSlotNumberInput,
+    bookASlotErrorMessage,
+    submitBookASlotForm,
+    colorOptions,
   } = props
 
-  const onClickBookASlot = event => {
+  const onSubmitBookASlotForm = event => {
     event.preventDefault()
-
-    bookASlot()
+    submitBookASlotForm()
   }
 
   const onChangeSlotNumberInput = event => {
-    const {value} = event.target
-
-    changeBookingSlotNumberInput(value)
+    changeSlotNumberInput(event.target.value)
   }
 
   const renderSlotNumberInputField = () => (
-    <div className="input-field-container">
-      <label className="input-label" htmlFor="slotNumber">
+    <div className="book-a-slot-input-field-container">
+      <label className="book-a-slot-input-label" htmlFor="slotNumber">
         Slot Number
       </label>
       <input
         type="text"
-        className="input"
+        className="book-a-slot-input"
         id="slotNumber"
         value={slotNumberInput}
         onChange={onChangeSlotNumberInput}
@@ -41,44 +38,41 @@ const BookingSlot = props => {
   )
 
   const onChangeColorInput = event => {
-    const {value} = event.target
-
-    changeBookingColorInput(value)
+    changeColorInput(event.target.value)
   }
 
   const renderColorSelectInput = () => (
-    <div className="input-field-container">
-      <label className="input-label" htmlFor="color">
+    <div className="book-a-slot-input-field-container">
+      <label className="book-a-slot-input-label" htmlFor="color">
         Color
       </label>
       <select
-        className="input"
+        className="book-a-slot-input"
         id="color"
-        onChange={onChangeColorInput}
         value={colorInput}
+        onChange={onChangeColorInput}
       >
-        <option value={carColors[0]}>{carColors[0]}</option>
-        <option value={carColors[1]}>{carColors[1]}</option>
-        <option value={carColors[2]}>{carColors[2]}</option>
-        <option value={carColors[3]}>{carColors[3]}</option>
+        {colorOptions.map(eachOption => (
+          <option key={eachOption.optionId} value={eachOption.displayText}>
+            {eachOption.displayText}
+          </option>
+        ))}
       </select>
     </div>
   )
 
   const onChangeRegistrationNumberInput = event => {
-    const {value} = event.target
-
-    changeBookingRegistrationNumberInput(value)
+    changeRegistrationNumberInput(event.target.value)
   }
 
   const renderRegistrationNumberInputField = () => (
-    <div className="input-field-container">
-      <label className="input-label" htmlFor="registrationNumber">
+    <div className="book-a-slot-input-field-container">
+      <label className="book-a-slot-input-label" htmlFor="registrationNumber">
         Registration Number
       </label>
       <input
         type="text"
-        className="input"
+        className="book-a-slot-input"
         id="registrationNumber"
         placeholder="TO-64-RI-6622"
         value={registrationNumberInput}
@@ -88,19 +82,17 @@ const BookingSlot = props => {
   )
 
   return (
-    <form className="booking-car-slot-form">
+    <form className="booking-car-slot-form" onSubmit={onSubmitBookASlotForm}>
       <h1 className="booking-car-slot-form-heading">Book a Car Slot</h1>
       {renderRegistrationNumberInputField()}
       {renderColorSelectInput()}
       {renderSlotNumberInputField()}
-      <button
-        type="submit"
-        className="booking-car-slot-form-button"
-        onClick={onClickBookASlot}
-      >
+      <button type="submit" className="booking-car-slot-form-button">
         Book a Slot
       </button>
-      {errorMessage && <p className="error-message">*{errorMessage}</p>}
+      {bookASlotErrorMessage && (
+        <p className="error-message">*{bookASlotErrorMessage}</p>
+      )}
     </form>
   )
 }

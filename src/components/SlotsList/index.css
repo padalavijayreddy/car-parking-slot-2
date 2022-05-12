@@ -2,39 +2,40 @@
   width: 65%;
 }
 
-.slots-list-heading {
-  font-size: 28px;
-  font-weight: 500;
-}
-
 .slots-list {
   width: 100%;
   border: 1px solid #94a3b8;
   border-radius: 8px;
   padding-left: 0px;
+  list-style-type: none;
 }
 
 .list-item-header {
   display: flex;
   justify-content: space-around;
   width: 100%;
-  list-style-type: none;
   padding-left: 20px;
 }
 
 .list-item-heading {
   font-family: 'Roboto';
   font-weight: 500;
+  margin-top: 22px;
+  margin-bottom: 22px;
 }
 
 .registration-number {
-  width: 195px;
+  width: 37%;
 }
 
 .color {
-  width: 150px;
+  width: 25%;
 }
 
 .slot-number {
-  width: 260px;
+  width: 25%;
+}
+
+.return-ticket {
+  width: 25%;
 }

@@ -1,26 +1,8 @@
-.input-field-container {
+.booking-car-slot-form {
   display: flex;
   flex-direction: column;
-  margin-bottom: 20px;
-}
-
-.input-label {
-  font-size: 16px;
-  margin-bottom: 8px;
-}
-
-.input {
-  color: #ffffff;
-  height: 40px;
-  border: 1px solid #94a3b8;
-  border-radius: 8px;
-  background-color: #292942;
-  padding: 8px;
-}
-
-.booking-car-slot-form {
   font-family: 'Roboto';
-  width: 30%;
+  width: 32%;
   margin-left: 20px;
 }
 
@@ -28,6 +10,48 @@
   font-family: 'Roboto';
   font-size: 28px;
   font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 25px;
+}
+
+@media screen and (min-width: 1200px) {
+  .booking-car-slot-form-heading {
+    margin-bottom: 30px;
+  }
+}
+
+.book-a-slot-input-field-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+@media screen and (min-width: 1200px) {
+  .book-a-slot-input-field-container {
+    margin-bottom: 30px;
+  }
+}
+
+.book-a-slot-input-label {
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.book-a-slot-input {
+  color: #ffffff;
+  height: 48px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background-color: transparent;
+  padding: 8px;
+  outline: none;
+}
+
+@media screen and (min-width: 1200px) {
+  .book-a-slot-input {
+    height: 58px;
+  }
 }
 
 .booking-car-slot-form-button {
@@ -39,6 +63,12 @@
   border-radius: 8px;
   cursor: pointer;
   padding: 12px;
+}
+
+@media screen and (min-width: 1200px) {
+  .booking-car-slot-form-button {
+    margin-top: 16px;
+  }
 }
 
 .error-message {

@@ -3,46 +3,40 @@ import './index.css'
 const GenerateSlots = props => {
   const {
     parkingSlotsInput,
-    initialCarsParkedInput,
+    carsInput,
     changeParkingSlotsInput,
-    changeInitialCarsParkedInput,
-    errorMessage,
-    generateSlots,
+    changeCarsInput,
+    generateSlotsErrorMessage,
+    submitGenerateSlotsForm,
   } = props
 
-  const onSubmitForm = event => {
+  const onSubmitGenerateSlotsForm = event => {
     event.preventDefault()
-
-    generateSlots()
+    submitGenerateSlotsForm()
   }
 
-  const onChangeInitialCarsParkedInput = event => {
-    const {target} = event
-    const {value} = target
-
-    changeInitialCarsParkedInput(value)
+  const onChangeCarsInput = event => {
+    changeCarsInput(event.target.value)
   }
 
-  const renderInitialCarsParkedInputField = () => (
+  const renderCarsInputField = () => (
     <div className="input-field-container">
       <label className="input-label" htmlFor="cars">
         Cars
       </label>
       <input
+        autoComplete="off"
         type="text"
         className="input"
         id="cars"
-        value={initialCarsParkedInput}
-        onChange={onChangeInitialCarsParkedInput}
+        value={carsInput}
+        onChange={onChangeCarsInput}
       />
     </div>
   )
 
   const onChangeParkingSlotsInput = event => {
-    const {target} = event
-    const {value} = target
-
-    changeParkingSlotsInput(value)
+    changeParkingSlotsInput(event.target.value)
   }
 
   const renderParkingSlotsInputField = () => (
@@ -51,6 +45,7 @@ const GenerateSlots = props => {
         Parking Slots
       </label>
       <input
+        autoComplete="off"
         type="text"
         className="input"
         id="parkingSlots"
@@ -67,18 +62,19 @@ const GenerateSlots = props => {
         src="https://res.cloudinary.com/dbc9s4sim/image/upload/q_auto:best/v1650345842/Car%20Parking%20Slots/unsplash_aLRzYepldy0_uvbz5e.png"
         alt="car parking slots"
       />
-      <form className="generate-slots-form">
+      <form
+        className="generate-slots-form"
+        onSubmit={onSubmitGenerateSlotsForm}
+      >
         <h1 className="generate-slots-form-heading">Car Parking Slots</h1>
         {renderParkingSlotsInputField()}
-        {renderInitialCarsParkedInputField()}
-        <button
-          type="submit"
-          className="generate-slots-form-button"
-          onClick={onSubmitForm}
-        >
+        {renderCarsInputField()}
+        <button type="submit" className="generate-slots-form-button">
           Generate Slots
         </button>
-        {errorMessage && <p className="error-message">*{errorMessage}</p>}
+        {generateSlotsErrorMessage && (
+          <p className="error-message">*{generateSlotsErrorMessage}</p>
+        )}
       </form>
     </div>
   )
