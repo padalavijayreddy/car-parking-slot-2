@@ -1,0 +1,68 @@
+* {
+  box-sizing: border-box;
+}
+
+.generate-slots-view-container {
+  display: flex;
+  color: #ffffff;
+  background-image: linear-gradient(to right, #10111e, #1c1d37);
+}
+
+.generate-slots-img {
+  width: 50%;
+  height: 100vh;
+}
+
+.generate-slots-form {
+  display: flex;
+  flex-direction: column;
+  align-self: center;
+  background-color: #292942;
+  border-radius: 32px;
+  margin: 64px;
+  padding: 48px;
+}
+
+.generate-slots-form-heading {
+  font-size: 32px;
+  font-weight: 500;
+  font-family: 'Roboto';
+  margin-top: 0px;
+  margin-bottom: 40px;
+}
+
+.input-field-container {
+  display: flex;
+  font-family: 'Roboto';
+  flex-direction: column;
+  margin-bottom: 30px;
+}
+
+.input-label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.input {
+  color: #ffffff;
+  height: 40px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background-color: #292942;
+  padding: 8px;
+}
+
+.generate-slots-form-button {
+  color: #ffffff;
+  background: #3b82f6;
+  font-family: 'Roboto';
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 12px;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+}

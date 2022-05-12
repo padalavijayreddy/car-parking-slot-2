@@ -1,0 +1,20 @@
+.booking-car-slot-view-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ffffff;
+  background-image: linear-gradient(to right, #10111e, #1c1d37);
+  font-family: 'Roboto';
+  min-height: 100vh;
+}
+
+.booking-car-slot-view-heading {
+  font-weight: 600;
+}
+
+.booking-car-slot-container {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  padding: 64px;
+}

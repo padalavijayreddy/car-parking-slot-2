@@ -1,0 +1,47 @@
+.input-field-container {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.input-label {
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.input {
+  color: #ffffff;
+  height: 40px;
+  border: 1px solid #94a3b8;
+  border-radius: 8px;
+  background-color: #292942;
+  padding: 8px;
+}
+
+.booking-car-slot-form {
+  font-family: 'Roboto';
+  width: 30%;
+  margin-left: 20px;
+}
+
+.booking-car-slot-form-heading {
+  font-family: 'Roboto';
+  font-size: 28px;
+  font-weight: 500;
+}
+
+.booking-car-slot-form-button {
+  color: #ffffff;
+  width: 100%;
+  background: #3b82f6;
+  font-family: 'Roboto';
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  padding: 12px;
+}
+
+.error-message {
+  color: #ff0000;
+  font-size: 14px;
+}
